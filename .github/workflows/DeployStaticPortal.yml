@@ -27,7 +27,7 @@ jobs:
       run: ls
       
     - name: Extract generated Portal
-      run: unzip -qq portal-output.zip -d static-portal
+      run: unzip -qq portal-output -d static-portal
       
     - name: list 
       run: ls
