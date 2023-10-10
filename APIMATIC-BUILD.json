@@ -217,7 +217,7 @@
       "renameHttpToRest": true
     },
     "pageTitle": "Petstore API",
-    "navTitle": "APIMatic FIS",
+    "navTitle": "APIMatic",
     "logoLink": "",
     "whiteLabel": false,
     "useHostedPortalScript": false,
