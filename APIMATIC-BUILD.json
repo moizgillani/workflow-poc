@@ -217,7 +217,7 @@
       "renameHttpToRest": true
     },
     "pageTitle": "Petstore API",
-    "navTitle": "APIMatic Test",
+    "navTitle": "APIMatic",
     "logoLink": "",
     "whiteLabel": false,
     "useHostedPortalScript": false,
