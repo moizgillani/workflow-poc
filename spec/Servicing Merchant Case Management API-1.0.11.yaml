@@ -1,0 +1,1437 @@
+---
+openapi: 3.0.0
+info:
+  title: Servicing Merchant Case Management API
+  description: "The Merchant Case Management API allows the merchants to create, search & get the details of a case \n # Authentication \n<SecurityDefinitions />"
+  contact:
+    name: Developer Support
+    email: APICustomerIntegration@fisglobal.com
+  version: 1.0.11
+servers:
+- url: https://apis.cert.worldpay.com/merchant-servicing/casemanagement/v1
+  description: SwaggerHub API Auto Mocking
+paths:
+  /cases:
+    post:
+      tags:
+      - Case
+      summary: Create a new case in service cloud
+      description: Create a new case in service cloud
+      operationId: createCase
+      parameters:
+      - name: v-correlation-id
+        in: header
+        description: Correlation Id
+        required: false
+        style: simple
+        explode: false
+        schema:
+          maxLength: 36
+          minLength: 36
+          pattern: "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]-[0-9a-fA-F]{12}"
+          type: string
+          format: uuid
+        example: 24578e35-9bd2-238f-b4c2-0bc9ad9aed2b
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCaseRequest'
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateCaseResponse'
+        default:
+          description: Default errors
+          headers:
+            v-correlation-id:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                "400 Bad Request":
+                  $ref: '#/components/examples/400BadRequest'
+                "401 Unauthorized":
+                  $ref: '#/components/examples/401Unauthorized'
+                "403 Forbidden":
+                  $ref: '#/components/examples/403Forbidden'
+                "404 Not Found":
+                  $ref: '#/components/examples/404NotFound'
+                "500 Server Error":
+                  $ref: '#/components/examples/500ServerError'
+      security:
+      - api_key: []
+  /cases/{caseNumber}/comments:
+    post:
+      tags:
+      - Case
+      summary: Add comments to an existing case
+      description: Add comments for an existing service request case present with Worldpay.
+      operationId: updateCase
+      parameters:
+      - name: v-correlation-id
+        in: header
+        description: Correlation Id
+        required: false
+        style: simple
+        explode: false
+        schema:
+          maxLength: 36
+          minLength: 36
+          pattern: "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]-[0-9a-fA-F]{12}"
+          type: string
+          format: uuid
+        example: 24578e35-9bd2-238f-b4c2-0bc9ad9aed2b
+      - name: caseNumber
+        in: path
+        description: Unique number assigned to the case (Auto generated once case is created)
+        required: true
+        style: simple
+        explode: false
+        schema:
+          maxLength: 12
+          type: string
+          example: "12376567"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCommentRequest'
+      responses:
+        "201":
+          description: Created
+        default:
+          description: Default errors
+          headers:
+            v-correlation-id:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                "400 Bad Request":
+                  $ref: '#/components/examples/400BadRequest'
+                "401 Unauthorized":
+                  $ref: '#/components/examples/401Unauthorized'
+                "403 Forbidden":
+                  $ref: '#/components/examples/403Forbidden'
+                "404 Not Found":
+                  $ref: '#/components/examples/404NotFound'
+                "500 Server Error":
+                  $ref: '#/components/examples/500ServerError'
+  /cases/{caseNumber}:
+    get:
+      tags:
+      - Case
+      summary: Retrieve details of an existing case
+      description: Retrieve details for a specific service request case submitted with Worldpay.
+      operationId: GetCaseDetails
+      parameters:
+      - name: v-correlation-id
+        in: header
+        description: Correlation Id
+        required: false
+        style: simple
+        explode: false
+        schema:
+          maxLength: 36
+          minLength: 36
+          pattern: "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]-[0-9a-fA-F]{12}"
+          type: string
+          format: uuid
+          example: 24578e35-9bd2-238f-b4c2-0bc9ad9aed2b
+      - name: caseNumber
+        in: path
+        description: Unique number assigned to the case (Auto generated once case is created)
+        required: true
+        style: simple
+        explode: false
+        schema:
+          maxLength: 12
+          type: string
+          example: "11111234"
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCaseDetailsResponseData'
+        default:
+          description: Default errors
+          headers:
+            v-correlation-id:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                "400 Bad Request":
+                  $ref: '#/components/examples/400BadRequest'
+                "401 Unauthorized":
+                  $ref: '#/components/examples/401Unauthorized'
+                "403 Forbidden":
+                  $ref: '#/components/examples/403Forbidden'
+                "404 Not Found":
+                  $ref: '#/components/examples/404NotFound'
+                "500 Server Error":
+                  $ref: '#/components/examples/500ServerError'
+      security:
+      - api_key: []
+  /cases/search:
+    post:
+      tags:
+      - Case
+      summary: Search cases
+      description: Search for service request cases  based on search parameters with Worldpay.
+      operationId: searchCases
+      parameters:
+      - name: v-correlation-id
+        in: header
+        description: Correlation Id
+        required: false
+        style: simple
+        explode: false
+        schema:
+          maxLength: 36
+          minLength: 36
+          pattern: "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]-[0-9a-fA-F]{12}"
+          type: string
+          format: uuid
+          example: 24578e35-9bd2-238f-b4c2-0bc9ad9aed2b
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchCasesRequest'
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchCasesResponse'
+        default:
+          description: Default errors
+          headers:
+            v-correlation-id:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                "400 Bad Request":
+                  $ref: '#/components/examples/400BadRequest'
+                "401 Unauthorized":
+                  $ref: '#/components/examples/401Unauthorized'
+                "403 Forbidden":
+                  $ref: '#/components/examples/403Forbidden'
+                "404 Not Found":
+                  $ref: '#/components/examples/404NotFound'
+                "500 Server Error":
+                  $ref: '#/components/examples/500ServerError'
+      security:
+      - api_key: []
+  /cases/{caseNumber}/attachments:
+    post:
+      tags:
+      - Case
+      summary: Add attachments to an existing case
+      description: Attach attachments for an existing service request case present with WorldPay.
+      operationId: createAttachments
+      parameters:
+      - name: v-correlation-id
+        in: header
+        description: Correlation Id
+        required: false
+        style: simple
+        explode: false
+        schema:
+          maxLength: 36
+          minLength: 36
+          pattern: "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]-[0-9a-fA-F]{12}"
+          type: string
+          format: uuid
+        example: 24578e35-9bd2-238f-b4c2-0bc9ad9aed2b
+      - name: caseNumber
+        in: path
+        description: Unique number assigned to the case (Auto generated once case is created)
+        required: true
+        style: simple
+        explode: false
+        schema:
+          maxLength: 12
+          type: string
+          example: "12376567"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAttachmentRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/caseNumber_attachments_body'
+      responses:
+        "201":
+          description: Created
+        default:
+          description: Default errors
+          headers:
+            v-correlation-id:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                "400 Bad Request":
+                  $ref: '#/components/examples/400BadRequest'
+                "401 Unauthorized":
+                  $ref: '#/components/examples/401Unauthorized'
+                "403 Forbidden":
+                  $ref: '#/components/examples/403Forbidden'
+                "404 Not Found":
+                  $ref: '#/components/examples/404NotFound'
+                "500 Server Error":
+                  $ref: '#/components/examples/500ServerError'
+      security:
+      - api_key: []
+  /cases/{caseNumber}/attachments/{attachmentId}:
+    get:
+      tags:
+      - Case
+      summary: Retrieve a specific attachment of an existing case
+      description: Retrieve attachment of a case by attachment identifier with Worldpay.
+      operationId: getAttachments
+      parameters:
+      - name: v-correlation-id
+        in: header
+        description: Correlation Id
+        required: false
+        style: simple
+        explode: false
+        schema:
+          maxLength: 36
+          minLength: 36
+          pattern: "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]-[0-9a-fA-F]{12}"
+          type: string
+          format: uuid
+          example: 24578e35-9bd2-238f-b4c2-0bc9ad9aed2b
+      - name: caseNumber
+        in: path
+        description: Case Number associated with the attachment
+        required: true
+        style: simple
+        explode: false
+        schema:
+          maxLength: 12
+          type: string
+          example: "14837"
+      - name: attachmentId
+        in: path
+        description: Attachment identifier for the file
+        required: true
+        style: simple
+        explode: false
+        schema:
+          maxLength: 255
+          type: string
+          example: A1JXVGTYUIO
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAttachmentResponse'
+        default:
+          description: Default errors
+          headers:
+            v-correlation-id:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                "400 Bad Request":
+                  $ref: '#/components/examples/400BadRequest'
+                "401 Unauthorized":
+                  $ref: '#/components/examples/401Unauthorized'
+                "403 Forbidden":
+                  $ref: '#/components/examples/403Forbidden'
+                "404 Not Found":
+                  $ref: '#/components/examples/404NotFound'
+                "500 Server Error":
+                  $ref: '#/components/examples/500ServerError'
+      security:
+      - api_key: []
+  /lookup/categories:
+    get:
+      tags:
+      - Lookup
+      summary: Retrieve list of case categories
+      description: Get list of all active case categories from WolrdPay.
+      operationId: GetCaseCategories
+      parameters:
+      - name: v-correlation-id
+        in: header
+        description: Correlation Id
+        required: false
+        style: simple
+        explode: false
+        schema:
+          maxLength: 36
+          minLength: 36
+          pattern: "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]-[0-9a-fA-F]{12}"
+          type: string
+          format: uuid
+        example: 24578e35-9bd2-238f-b4c2-0bc9ad9aed2b
+      - name: country
+        in: query
+        description: "country for retrieveing the categories, default is US if nothing is passed"
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: US
+          enum:
+          - US
+          - GB
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCaseCategoriesResponse'
+              examples:
+                GetCaseCategoriesResponse:
+                  value:
+                    categories:
+                    - Account Management
+                    - Collections
+                    - Configuration/Downloads
+                    - Contract Management
+                    - Disputes
+        default:
+          description: Default errors
+          headers:
+            v-correlation-id:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                "400 Bad Request":
+                  $ref: '#/components/examples/400BadRequest'
+                "401 Unauthorized":
+                  $ref: '#/components/examples/401Unauthorized'
+                "403 Forbidden":
+                  $ref: '#/components/examples/403Forbidden'
+                "404 Not Found":
+                  $ref: '#/components/examples/404NotFound'
+                "500 Server Error":
+                  $ref: '#/components/examples/500ServerError'
+      security:
+      - api_key: []
+  /lookup/categories/casetypes:
+    get:
+      tags:
+      - Lookup
+      summary: Retrieve case types for a specific case category
+      description: Retrieve list of case types for specific case category with WolrdPay
+      operationId: GetCaseCategoryTypes
+      parameters:
+      - name: v-correlation-id
+        in: header
+        description: Correlation Id
+        required: false
+        style: simple
+        explode: false
+        schema:
+          maxLength: 36
+          minLength: 36
+          pattern: "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]-[0-9a-fA-F]{12}"
+          type: string
+          format: uuid
+        example: 24578e35-9bd2-238f-b4c2-0bc9ad9aed2b
+      - name: category
+        in: query
+        description: Case category. High level grouping of case types.
+        required: false
+        style: form
+        explode: true
+        schema:
+          maxLength: 70
+          type: string
+          example: Account Management
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCaseCategoryTypesResponse'
+              examples:
+                GetCaseCategoryTypesResponse:
+                  value:
+                    category: Account Management
+                    caseTypes:
+                    - Add Location
+                    - Authorized User Maintenance
+                    - Close Account
+                    - Dealer/Partner/RM Change
+        default:
+          description: Default errors
+          headers:
+            v-correlation-id:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                "400 Bad Request":
+                  $ref: '#/components/examples/400BadRequest'
+                "401 Unauthorized":
+                  $ref: '#/components/examples/401Unauthorized'
+                "403 Forbidden":
+                  $ref: '#/components/examples/403Forbidden'
+                "404 Not Found":
+                  $ref: '#/components/examples/404NotFound'
+                "500 Server Error":
+                  $ref: '#/components/examples/500ServerError'
+      security:
+      - api_key: []
+  /lookup/reasons:
+    get:
+      tags:
+      - Lookup
+      summary: Retrieve list of case reasons from Worldpay
+      description: Retrieve list of all case reasons from WolrdPay.
+      operationId: GetCaseReasons
+      parameters:
+      - name: v-correlation-id
+        in: header
+        description: Correlation Id
+        required: false
+        style: simple
+        explode: false
+        schema:
+          maxLength: 36
+          minLength: 36
+          pattern: "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]-[0-9a-fA-F]{12}"
+          type: string
+          format: uuid
+        example: 24578e35-9bd2-238f-b4c2-0bc9ad9aed2b
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCaseReasonsResponse'
+              examples:
+                GetCaseReasonsResponse:
+                  value:
+                    reasons:
+                    - Escalation
+                    - Repeat Call
+                    - Service Activity
+                    - Status Update
+        default:
+          description: Default errors
+          headers:
+            v-correlation-id:
+              $ref: '#/components/headers/CorrelationId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                "400 Bad Request":
+                  $ref: '#/components/examples/400BadRequest'
+                "401 Unauthorized":
+                  $ref: '#/components/examples/401Unauthorized'
+                "403 Forbidden":
+                  $ref: '#/components/examples/403Forbidden'
+                "404 Not Found":
+                  $ref: '#/components/examples/404NotFound'
+                "500 Server Error":
+                  $ref: '#/components/examples/500ServerError'
+components:
+  schemas:
+    CreateCaseRequest:
+      required:
+      - callerInfo
+      - caseInfo
+      - entityInfo
+      type: object
+      properties:
+        entityInfo:
+          type: object
+          description: Entity information details
+          allOf:
+          - $ref: '#/components/schemas/EntityInfo'
+        callerInfo:
+          type: object
+          description: Caller information details
+          allOf:
+          - $ref: '#/components/schemas/CallerInfo'
+        caseInfo:
+          type: object
+          description: Case information details
+          allOf:
+          - $ref: '#/components/schemas/CaseInfo'
+        attachments:
+          type: array
+          description: Attachment file names
+          items:
+            maxItems: 3
+            allOf:
+            - $ref: '#/components/schemas/Attachment'
+    CaseInfo:
+      required:
+      - category
+      - description
+      - origin
+      - reason
+      - subject
+      type: object
+      properties:
+        subject:
+          maxLength: 255
+          minLength: 1
+          type: string
+          description: Brief description of the requstor’s issue
+          example: Update Primary Contact
+        category:
+          maxLength: 70
+          minLength: 1
+          type: string
+          description: Case category. High level grouping of case types
+          example: Account Management
+        caseType:
+          maxLength: 70
+          type: string
+          description: Case type for selected category for the case
+          example: Authorized User Maintenance
+        reason:
+          maxLength: 70
+          minLength: 1
+          type: string
+          description: Reason for creating the case
+          example: Service Activity
+        description:
+          maxLength: 32000
+          minLength: 1
+          type: string
+          description: Description of a case
+          example: Detailed discription
+        origin:
+          maxLength: 70
+          minLength: 1
+          type: string
+          description: Indicates the source of the case.
+          example: Web-eWPD
+        priority:
+          maxLength: 70
+          type: string
+          description: Defines time limit for case resolution
+          example: Urgent
+          enum:
+          - Urgent
+          - High
+          - Medium
+          - Low
+          - Critical < 4hours
+          - High < 24 hrs
+          - Medium <48 hours
+          - Low <4days
+          - Standard Request
+          - Rush Request
+          - Overnight
+          - Three Day
+          - Two Day
+          - Ground
+          - None
+      description: "Information needed to create a case. If the Entity Type is MERCHANT or CHAIN, case type is required"
+    Attachment:
+      required:
+      - fileContent
+      - fileName
+      type: object
+      properties:
+        fileName:
+          maxLength: 255
+          minLength: 5
+          type: string
+          description: Name of the file with extension
+          example: testFile.txt
+        fileContent:
+          maxLength: 1000
+          type: string
+          description: Content of the file. Accepts upto 4 MB
+          format: base64
+          example: V2ViIC0gZVdQRA==
+    AttachmentIdentifiers:
+      required:
+      - fileName
+      - id
+      type: object
+      properties:
+        fileName:
+          maxLength: 255
+          minLength: 5
+          type: string
+          description: This element contains file name of attched file
+          example: testFile.xml
+        id:
+          maxLength: 255
+          minLength: 1
+          type: string
+          description: Attachment file identifier.
+          example: XCG1234
+    GetAttachmentResponse:
+      required:
+      - fileContent
+      - fileName
+      type: object
+      properties:
+        attachmentId:
+          maxLength: 255
+          minLength: 1
+          type: string
+          description: Attachment identifier for the file.
+          example: 0099UI6732
+        fileName:
+          maxLength: 255
+          minLength: 5
+          type: string
+          description: This element contains file name of attachment.
+          example: testFile.xml
+        fileContent:
+          maxLength: 1000
+          type: string
+          description: File content in the form of base64 or multipart file.
+          format: base64 or multipart
+          example: V2ViIC0gZVdQRA==
+      description: Retrive attachment files on a case. All attachments (file names with attachment ids) can be retrieved on a case by looking up the case details.
+    SearchCasesRequest:
+      required:
+      - dateRange
+      - dateType
+      type: object
+      properties:
+        entityInfo:
+          type: object
+          description: "Pass entityInfo related to region/national/division/superChain/store/chain or merchant for which this search will happen. Pass entityType and entityValue, it should map to a single entity only."
+          allOf:
+          - $ref: '#/components/schemas/EntityInfo'
+        dateType:
+          maxLength: 10
+          minLength: 8
+          type: string
+          description: Type of date
+          example: openDate
+          enum:
+          - openDate
+          - closeDate
+        dateRange:
+          type: object
+          description: "Date range, can be between 1 and 60 days."
+          allOf:
+          - $ref: '#/components/schemas/DateRangeSearch'
+        caseInfo:
+          type: object
+          description: Case information.
+          allOf:
+          - $ref: '#/components/schemas/SearchCaseInfoRequest'
+        paginationRequest:
+          type: object
+          description: Pagination requested details
+          allOf:
+          - $ref: '#/components/schemas/PaginationType'
+        sortResultsBy:
+          type: array
+          description: "Select up to four fields for sorting the search results. Fields that can be selected are entityValue, caseNumber, category, caseType, origin, status and priority."
+          example:
+          - entityValue
+          - caseNumber
+          - category
+          - caseType
+          items:
+            type: string
+            description: Sorted list of cases
+            allOf:
+            - $ref: '#/components/schemas/SortResultsBy'
+      description: Request for Case Search .
+    DateRangeSearch:
+      required:
+      - fromDate
+      - toDate
+      type: object
+      properties:
+        fromDate:
+          maxLength: 10
+          pattern: "[0-9]{4}-[0-9]{2}-[0-9]{2}"
+          type: string
+          description: specify start date for range.
+          format: yyyy-mm-dd
+          example: 2021-10-27
+        toDate:
+          maxLength: 10
+          pattern: "[0-9]{4}-[0-9]{2}-[0-9]{2}"
+          type: string
+          description: specify end date for range.
+          format: yyyy-mm-dd
+          example: 2021-12-27
+      description: Specify the date range for search. Consumer can lookup for 60 days data at a time. If you want more data divide your search into multiple windows.
+    SortResultsBy:
+      type: object
+      properties:
+        fieldName:
+          maxLength: 15
+          type: string
+          description: Field name to be used for sorting purposes.
+          example: caseNumber
+        orderBy:
+          maxLength: 4
+          type: string
+          description: Order search results in ascnding or descending order.
+          example: DESC
+          default: ASC
+          enum:
+          - ASC
+          - DESC
+      description: Use for filtering search results.
+    SearchCaseInfoRequest:
+      type: object
+      properties:
+        caseNumber:
+          maxLength: 12
+          type: string
+          description: Case number assigned to case
+          example: "02567576"
+        category:
+          maxLength: 70
+          type: string
+          description: Case category. High level grouping of case types
+          example: Account Management
+        caseType:
+          maxLength: 70
+          type: string
+          description: Case type for selected category for the case
+          example: Authorized User Maintenance
+        status:
+          maxLength: 25
+          type: string
+          description: Case status
+          example: In Progress
+          enum:
+          - New
+          - In Progress
+          - Pending
+          - Closed
+        priority:
+          maxLength: 70
+          type: string
+          description: Defines time limit for case resolution
+          example: Urgent
+          enum:
+          - Urgent
+          - High
+          - Medium
+          - Low
+          - Critical < 4hours
+          - High < 24 hrs
+          - Medium <48 hours
+          - Low <4days
+          - Standard Request
+          - Rush Request
+          - Overnight
+          - Three Day
+          - Two Day
+          - Ground
+      description: Search parameters for searching the case.
+    SearchCaseInfoResponse:
+      type: object
+      properties:
+        caseNumber:
+          maxLength: 12
+          type: string
+          description: Unique number assigned to the case (Auto generated once case is created)
+          example: "02567576"
+        category:
+          maxLength: 70
+          type: string
+          description: Case category. High level grouping of case types.
+          example: Account Management
+        caseType:
+          maxLength: 70
+          type: string
+          description: Case type for selected category for the case
+          example: Authorized User Maintenance
+        origin:
+          maxLength: 70
+          type: string
+          description: Source of the case
+          example: api-Payment Accelerator
+        status:
+          maxLength: 25
+          type: string
+          description: Case status
+          example: In Progress
+          enum:
+          - New
+          - In Progress
+          - Pending
+          - Closed
+        priority:
+          maxLength: 70
+          type: string
+          description: Defines time limit for case resolution
+          example: Urgent
+          enum:
+          - Urgent
+          - High
+          - Medium
+          - Low
+          - Critical < 4hours
+          - High < 24 hrs
+          - Medium <48 hours
+          - Low <4days
+          - Standard Request
+          - Rush Request
+          - Overnight
+          - Three Day
+          - Two Day
+          - Ground
+        subject:
+          maxLength: 255
+          type: string
+          description: Brief description of the customer’s question or feedback.
+          example: MID786543 - Card 1234 load issues
+      description: Search parameters for searching the case.
+    CreateAttachmentRequest:
+      required:
+      - attachments
+      type: object
+      properties:
+        attachments:
+          maxLength: 3
+          type: array
+          description: Attachment file names
+          items:
+            allOf:
+            - $ref: '#/components/schemas/Attachment'
+    GetCaseCategoriesResponse:
+      type: object
+      properties:
+        categories:
+          type: array
+          description: Case category list
+          example:
+          - Account Management
+          - Collections
+          - Configuration/Downloads
+          items:
+            type: string
+            example: "[\"Account Management\"]"
+      description: List of case categories from WolrdPay will be returned in the response from WolrdPay
+    GetCaseCategoryTypesResponse:
+      type: object
+      properties:
+        category:
+          maxLength: 70
+          type: string
+          description: Case Category. High level grouping of case types.
+          example: Account Management
+        caseTypes:
+          type: array
+          description: List of applicable case types for case category.
+          items:
+            type: string
+            example: "[\"Add Location\"]"
+      description: List of case types for a specific case category from WolrdPay will be returned in the response
+    GetCaseReasonsResponse:
+      type: object
+      properties:
+        reasons:
+          type: array
+          description: Case reasons
+          items:
+            type: string
+            example: "[\"Escalation\"]"
+      description: List of case reasons for Merchant Operatins will be returned in the response from WolrdPay
+    SearchCasesResponse:
+      type: object
+      properties:
+        caseList:
+          type: array
+          description: Case list details for selected case criteria.
+          items:
+            allOf:
+            - $ref: '#/components/schemas/CaseList'
+        paginationResponse:
+          type: object
+          description: Pagination response details
+          allOf:
+          - $ref: '#/components/schemas/PaginationResponse'
+      description: List of Cases will be returned in the Search Response from WolrdPay
+    CaseList:
+      type: object
+      properties:
+        caseHierarchy:
+          type: object
+          description: Case hierarchy details.
+          allOf:
+          - $ref: '#/components/schemas/Hierarchy'
+        caseInfo:
+          type: object
+          description: Case information details.
+          allOf:
+          - $ref: '#/components/schemas/SearchCaseInfoResponse'
+      description: List of cases associated with salesOrganization/salesChannel/partner/region/national/division/superChain/store/chain or merchant.
+    PaginationResponse:
+      type: object
+      properties:
+        pagination:
+          type: object
+          description: Pagination type details
+          allOf:
+          - $ref: '#/components/schemas/PaginationType'
+        moreDataAvailable:
+          maxLength: 3000
+          minLength: 0
+          type: string
+          description: Indicates if more data is available for the search criteria
+          example: "false"
+        totalRowCount:
+          maximum: 10000
+          type: integer
+          description: Total number of rows available for the search results
+          format: int32
+          example: 3000
+        totalReturnedCount:
+          maxLength: 25
+          type: integer
+          description: Number of rows returned
+          format: int32
+          example: 1
+    PaginationType:
+      type: object
+      properties:
+        limit:
+          maxLength: 25
+          type: string
+          description: "The maximum number of entries to return. If the value exceeds the maximum, then the maximum value will be used."
+          example: "3"
+          default: "25"
+        offset:
+          maxLength: 1
+          minLength: 1
+          type: string
+          description: The offset used for page results
+          example: "1"
+          default: "1"
+      description: Use for pagination.
+    Hierarchy:
+      type: object
+      properties:
+        salesOrganizationCode:
+          maxLength: 10
+          type: string
+          description: Sales Organization Code
+          example: "55"
+        salesOrganizationName:
+          maxLength: 30
+          type: string
+          description: Sales organization name
+          example: CORE
+        salesChannelCode:
+          maxLength: 10
+          type: string
+          description: Sales channel code
+          example: "812"
+        salesChannelName:
+          maxLength: 30
+          type: string
+          description: Sales channel name
+          example: ABC NORTH WEST
+        partnerId:
+          maxLength: 16
+          type: string
+          description: The identifier associated with the partner group
+          example: "81"
+        partnerName:
+          maxLength: 50
+          type: string
+          description: The name of the partner's group
+          example: VSoft
+        regionCode:
+          maxLength: 10
+          type: string
+          description: Region Code
+          example: MD0001
+        regionName:
+          maxLength: 255
+          type: string
+          description: Region Name
+          example: Mid West South Central
+        nationalCode:
+          maxLength: 7
+          type: string
+          description: National code
+          example: ABC101
+        nationalName:
+          maxLength: 30
+          type: string
+          description: National name
+          example: ABC Company
+        divisionCode:
+          maxLength: 3
+          minLength: 1
+          type: string
+          description: Division Code
+          example: "191"
+        divisionName:
+          maxLength: 30
+          type: string
+          description: The name associated with a given partner division
+          example: DIVISION 191
+        superChainCode:
+          maxLength: 10
+          type: string
+          description: Super chain code
+          example: STEST7053
+        superChainName:
+          maxLength: 30
+          type: string
+          description: Super chain name
+          example: SKrog
+        storeNumber:
+          maxLength: 9
+          minLength: 1
+          type: string
+          description: The identifier code of a store under a given partner chain. Can store alphanumber value when creating the store
+          example: "000000011"
+        storeName:
+          maxLength: 40
+          minLength: 1
+          type: string
+          description: The name associated with a store under a given partner chain
+          example: "ABC #037"
+        chainCode:
+          maxLength: 6
+          type: string
+          description: "The Chain Code is the level of the merchant hierarchy that groups merchant identifiers (MIDs) and any related roll-up values under a common identifier for settlement, billing and reporting. Chain Code is the primary identifier for merchants boarded in MDB (Merchant Database) system."
+          example: 0T0081
+        chainName:
+          maxLength: 25
+          minLength: 2
+          type: string
+          description: The name associated with a given merchant under a chain-level hierarchy
+          example: "ABC, Inc"
+        merchantId:
+          maxLength: 16
+          minLength: 10
+          type: string
+          description: The identifier code associated with a given merchant under a store-level hierarchy
+          example: "111222333444555"
+        merchantName:
+          maxLength: 30
+          minLength: 1
+          type: string
+          description: The name associated with a given merchant under a store-level hierarchy
+          example: "ABC #037"
+    CallerInfo:
+      required:
+      - email
+      - requestor
+      type: object
+      properties:
+        requestor:
+          maxLength: 50
+          minLength: 1
+          type: string
+          description: Name of the requestor
+          example: RequestorName
+        email:
+          maxLength: 100
+          type: string
+          description: Requestor's email address
+          format: Email
+          example: Requestors@email.com
+        phoneNumber:
+          maxLength: 10
+          type: string
+          description: Requestor's phone number
+          example: "6789923328"
+    AdditionalCaseDetails:
+      type: object
+      properties:
+        caseNumber:
+          maxLength: 12
+          type: string
+          description: Unique number assigned to the case (Auto generated once case is created)
+          example: "0123213213"
+        category:
+          maxLength: 70
+          type: string
+          description: Case category. High level grouping of case types.
+          example: Account Management
+        caseType:
+          maxLength: 70
+          type: string
+          description: Case type for selected category for the case
+          example: Authorized User Maintenance
+        priority:
+          maxLength: 50
+          type: string
+          description: Defines time limit for case resolution
+          example: Urgent
+          enum:
+          - Urgent
+          - High
+          - Medium
+          - Low
+          - Critical < 4hours
+          - High < 24 hrs
+          - Medium <48 hours
+          - Low <4days
+          - Standard Request
+          - Rush Request
+          - Overnight
+          - Three Day
+          - Two Day
+          - Ground
+        status:
+          maxLength: 35
+          type: string
+          description: Status of a case
+          example: Pending
+          enum:
+          - New
+          - Pending
+          - In Progress
+          - Closed
+        subStatus:
+          type: string
+          description: Only applicable when status is Pending
+          example: Order Placed
+          enum:
+          - Pending Internal
+          - Pending External
+        reason:
+          maxLength: 70
+          type: string
+          description: The reason a case was created
+          example: Status Update
+        subject:
+          maxLength: 255
+          minLength: 1
+          type: string
+          description: Brief description of the customer’s question or feedback.
+          example: KB-SUB-827
+        description:
+          maxLength: 32000
+          minLength: 1
+          type: string
+          description: User defined field.
+          example: This is the test description
+    EntityInfo:
+      required:
+      - entityValue
+      type: object
+      properties:
+        entityValue:
+          maxLength: 20
+          type: string
+          description: Unique identifier of the entity
+          example: 0H9124
+        entityType:
+          maxLength: 10
+          type: string
+          description: "Type of the entity, Required for US entities"
+          example: CHAIN
+          enum:
+          - MERCHANT
+          - CHAIN
+          - PARTNER
+    CreateCommentRequest:
+      required:
+      - comment
+      type: object
+      properties:
+        comment:
+          maxLength: 4000
+          type: string
+          description: Comment to be added on the case
+          example: This is a new comment
+    CreateCaseResponse:
+      required:
+      - SuccessResponse
+      type: object
+      properties:
+        caseNumber:
+          maxLength: 12
+          type: string
+          description: Unique number assigned to the case (Auto generated once case is created)
+          example: "1232878"
+    Error:
+      type: object
+      properties:
+        errors:
+          type: array
+          description: Error response details
+          items:
+            allOf:
+            - $ref: '#/components/schemas/ErrorResponse'
+    GetCaseDetailsResponseData:
+      type: object
+      properties:
+        hierarchy:
+          type: object
+          description: Hierarchy details
+          allOf:
+          - $ref: '#/components/schemas/Hierarchy'
+        callerInfo:
+          type: object
+          description: Caller information
+          allOf:
+          - $ref: '#/components/schemas/CallerInfo'
+        caseInfo:
+          type: object
+          description: Case information
+          allOf:
+          - $ref: '#/components/schemas/AdditionalCaseDetails'
+        attachments:
+          type: array
+          description: Attachments details
+          items:
+            allOf:
+            - $ref: '#/components/schemas/AttachmentIdentifiers'
+    ErrorResponse:
+      required:
+      - errorMessage
+      type: object
+      properties:
+        correlationId:
+          maxLength: 36
+          pattern: "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]-[0-9a-fA-F]{12}"
+          type: string
+          description: Worldpay generated Correlation Id
+          example: 3fcb1437-4e52-4946-9ae1-e618351b6d16
+        errorCode:
+          maxLength: 20
+          type: string
+          description: Error code
+          example: 400 Bad Request
+        errorMessage:
+          maxLength: 255
+          type: string
+          description: Error message
+          example: Missing NotificationId in the request.
+    caseNumber_attachments_body:
+      type: object
+      properties:
+        file:
+          maxLength: 1000
+          type: string
+          description: Attachment file
+          format: base64
+          example: V2ViIC0gZVdQRA==
+  responses:
+    Default:
+      description: Default errors
+      headers:
+        v-correlation-id:
+          $ref: '#/components/headers/CorrelationId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            "400 Bad Request":
+              $ref: '#/components/examples/400BadRequest'
+            "401 Unauthorized":
+              $ref: '#/components/examples/401Unauthorized'
+            "403 Forbidden":
+              $ref: '#/components/examples/403Forbidden'
+            "404 Not Found":
+              $ref: '#/components/examples/404NotFound'
+            "500 Server Error":
+              $ref: '#/components/examples/500ServerError'
+  parameters:
+    CorrelationId:
+      name: v-correlation-id
+      in: header
+      description: Worldpay generated Correlation Id
+      required: false
+      style: simple
+      explode: false
+      schema:
+        maxLength: 36
+        minLength: 36
+        pattern: "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]-[0-9a-fA-F]{12}"
+        type: string
+        description: Worldpay generated Correlation Id
+        format: uuid
+        example: 24578e35-9bd2-238f-b4c2-0bc9ad9aed2b
+  examples:
+    "204NoCOntent":
+      description: NoContent
+      value:
+        errors:
+        - errorMessage: Not found exact match
+    "400BadRequest":
+      description: Bad Request
+      value:
+        errors:
+        - errorMessage: "Invalid Enum value. Valid values: CHAIN, MERCHANT, PARTNER, OUTLET, GROUP, COMPANY"
+          target: EntityInfo.entityType
+    "401Unauthorized":
+      value:
+        errors:
+        - errorMessage: You are not authorized to access this resource
+    "403Forbidden":
+      value:
+        errors:
+        - errorMessage: Access is denied.
+    "404NotFound":
+      value:
+        errors:
+        - errorMessage: entity not found
+    "500ServerError":
+      value:
+        errors:
+        - errorMessage: "Internal server error, please contact support referencing correlationId: 871a2a88-064f-4124-a864-e03a47573144"
+  headers:
+    CorrelationId:
+      description: Worldpay generated Correlation Id
+      style: simple
+      explode: false
+      schema:
+        maxLength: 36
+        pattern: "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]-[0-9a-fA-F]{12}"
+        type: string
+        format: uuid
+      example: 3fcb1437-4e52-4946-9ae1-e618351b6d16
+  securitySchemes:
+    api_key:
+      type: apiKey
+      description: "``` License format is WORLDPAY license='xxxx'``` \n"
+      name: Authorization
+      in: header
